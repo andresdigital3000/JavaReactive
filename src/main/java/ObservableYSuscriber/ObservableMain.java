@@ -125,15 +125,16 @@ public class ObservableMain {
   }
 
   public static void observableFlatMap(){
-    Observable<Integer> source = Observable.just(1,2,3);
+    Observable<Integer> source1 = Observable.just(1,2,3);
     Observable<Integer> source2 = Observable.just(4,5,6);
 
     Observable combinado = Observable.create(emmiter -> {
-      emmiter.onNext(source);
+      emmiter.onNext(source1);
       emmiter.onNext(source2);
     });
 
     combinado.subscribe(datos -> System.out.println(datos));
+    combinado.flatMap(datos -> datos).subscribe(s-> System.out.println(s));
   }
 
 }

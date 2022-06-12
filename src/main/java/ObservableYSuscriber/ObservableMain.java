@@ -18,7 +18,8 @@ public class ObservableMain {
     //createObservableRange();
     //createObservableInterval();
     //createObservableDefer();
-    observableBufferExample();
+    //observableBufferExample();
+    transformingObservables();
   }
 
   public static void createObservableBasic() {
@@ -49,7 +50,7 @@ public class ObservableMain {
   }
 
   public static void createObservableRange() {
-    Observable.range(1, 10)
+    Observable.range(0, 2)
               .subscribe(s -> System.out.println("Rango recibido: "+s));
 
   }
@@ -74,8 +75,51 @@ public class ObservableMain {
   public static void observableBufferExample() {
       String[] persons = new String[] {"Joe", "Jane", "John", "Phil"};
       Observable.fromArray(persons)
-                .buffer(2, 3)
+                .buffer(2, 1)
                 .subscribe((personList)->{System.out.println(personList);});
+
+  }
+
+  public static void transformingObservables() {
+    System.out.println("--------map------------------------");
+    Observable<Integer> observable = Observable.range(1, 3);
+    observable.map(i -> "String: "+i)
+              .subscribe(
+                  result -> System.out.println(result),
+                  e -> System.out.println("Error: " + e),
+                  () -> System.out.println("Completed")
+              );
+    System.out.println("--------flatmap------------------------");
+    observable = Observable.range(1, 3);
+    observable.flatMap( i -> Observable.range(0,i))
+              .subscribe(
+                  result -> System.out.println(result),
+                  e -> System.out.println("Error: " + e),
+                  () -> System.out.println("Completed")
+              );
+    System.out.println("--------buffer ------------------------");
+    observable = Observable.range(0, 5);
+    observable.buffer(2)
+              .subscribe(
+                  list -> System.out.println(list),
+                  e -> System.out.println("Error: " + e),
+                  () -> System.out.println("Completed")
+              );
+    observable = Observable.range(0, 10);
+    observable.buffer(3,2)
+              .subscribe(
+                  list -> System.out.println(list),
+                  e -> System.out.println("Error: " + e),
+                  () -> System.out.println("Completed")
+              );
+    System.out.println("--------group by ------------------------");
+    observable = Observable.range(0, 10);
+    observable.groupBy(v ->  v % 2 == 0)
+              .subscribe(
+                  group -> group.takeLast(1).subscribe(v-> System.out.println(v)),
+                  e -> System.out.println("Error: " + e),
+                  () -> System.out.println("Completed")
+              );
 
   }
 

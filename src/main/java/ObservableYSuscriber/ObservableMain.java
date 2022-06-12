@@ -17,7 +17,8 @@ public class ObservableMain {
     //createObservableFromIterable();
     //createObservableRange();
     //createObservableInterval();
-    createObservableDefer();
+    //createObservableDefer();
+    observableBufferExample();
   }
 
   public static void createObservableBasic() {
@@ -67,6 +68,15 @@ public class ObservableMain {
     source.subscribe(i -> System.out.println("Observer 1: "+i));
     fin = 10;
     source.subscribe(i -> System.out.println("Observer 2: " + i));
+  }
+
+
+  public static void observableBufferExample() {
+      String[] persons = new String[] {"Joe", "Jane", "John", "Phil"};
+      Observable.fromArray(persons)
+                .buffer(2, 3)
+                .subscribe((personList)->{System.out.println(personList);});
+
   }
 
 
